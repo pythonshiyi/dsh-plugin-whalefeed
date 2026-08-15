@@ -14,7 +14,7 @@
 - Keyboard accessibility: Tab focus, Enter/Space toggle, Esc close, ARIA labels/dialog roles.
 - BroadcastChannel multi-tab sync with `storage` event fallback.
 - Corrupted localStorage backup (`:bak`) before reset.
-- `shell.overlay` slot fallback to `conversation.session.header.utilities` compact badge.
+- Session-scoped slot rendering (`conversation.session.header.utilities`) with CSS fixed floating; fallback to `conversation.chat.assistant-actions`.
 - GitHub Actions CI (`npm run check`, `npm test`, `npm run pack`).
 - ESLint flat config and Prettier config.
 - New config options: `hostPersistence`, `historyLimit`.

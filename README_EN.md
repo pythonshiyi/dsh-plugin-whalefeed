@@ -27,7 +27,7 @@ English | [中文](README.md)
 - **Multi-tab sync**: `BroadcastChannel` first, `storage` event fallback.
 - **Corrupted data backup**: damaged local state is backed up as `:bak` before rebuilding.
 - **i18n**: zh/en, with Chinese fallback.
-- **Slot fallback**: uses `shell.overlay` first; falls back to a compact session-header badge when unavailable.
+- **Session-slot rendering + CSS floating**: reads live token data from the session header slot, then uses `position: fixed` to float the whale over the whole page; falls back to the message actions slot when the header slot is unavailable.
 
 ## Requirements
 
@@ -103,7 +103,7 @@ You can override with `{ threshold, belly, label? }`. Stages are automatically s
 
 | Area          | Details                                                                                                          |
 | ------------- | ---------------------------------------------------------------------------------------------------------------- |
-| Primary slot  | `shell.overlay`; falls back to `conversation.session.header.utilities`                                           |
+| Primary slot  | `conversation.session.header.utilities` (session scope, provides token data); CSS `fixed` for global floating; fallback `conversation.chat.assistant-actions` |
 | Data source   | `useProjection("tokenUsage")`, same source as the conversation snapshot                                          |
 | Total         | `uncachedInputTokens + cacheReadTokens + cacheWriteTokens + outputTokens`                                        |
 | Feeding       | On projection change, `delta = current total - last total`; if `delta > 0`, feed the current session's whale     |
@@ -121,8 +121,8 @@ With host persistence enabled, state is kept in a local file on the same Harness
 **Is host persistence safe?**
 Data is written only to the Harness local data directory; no third-party network or remote upload is involved.
 
-**Why do I only see a header badge in some environments?**
-The current Harness version may not expose the `shell.overlay` slot; the plugin automatically falls back to a compact session-header badge.
+**Why is the whale not visible in some environments?**
+The plugin needs a session-scoped slot to read token data. If `conversation.session.header.utilities` is unavailable, it tries `conversation.chat.assistant-actions`; if neither exists, it does not render.
 
 **How do I export/import?**
 Open the pet details → Export downloads a JSON file; Import prompts you to paste a JSON state.
@@ -136,7 +136,7 @@ No. Reset anchors `lastTotalTokens` to the current projection total, so previous
 ## Compatibility
 
 - DeepSeek Harness `0.1.0-rc.6` (web profile)
-- Depends on the `tokenUsage` projection, `shell.overlay` slot, and optionally the Host `webServer` service
+- Depends on the `tokenUsage` projection, `conversation.session.header.utilities` slot, and optionally the Host `webServer` service
 - All accesses are guarded; if Harness changes shape in a future release, the plugin degrades silently instead of throwing
 
 ## Development

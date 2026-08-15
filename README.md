@@ -27,7 +27,7 @@
 - **多标签页同步**：优先使用 `BroadcastChannel`，兼容 `storage` 事件。
 - **损坏数据备份**：本地状态损坏时自动备份为 `:bak` 再重建。
 - **多语言**：zh/en，缺失时回退中文。
-- **槽位降级**：优先 `shell.overlay`；不可用时自动降级为会话头部徽标。
+- **会话槽位渲染 + CSS 悬浮**：通过会话头部槽位拿到实时 token 数据，再用 `position: fixed` 让鲸鱼娘悬浮在整个页面上；头部槽位不可用时降级到消息操作区。
 
 ## 环境要求
 
@@ -103,7 +103,7 @@ npm install dsh-plugin-whalefeed
 
 | 环节      | 说明                                                                                                    |
 | --------- | ------------------------------------------------------------------------------------------------------- |
-| 主槽位    | `shell.overlay`；不可用时降级 `conversation.session.header.utilities`                                   |
+| 主槽位    | `conversation.session.header.utilities`（会话作用域，提供 token 数据）；CSS `fixed` 实现全局悬浮；降级 `conversation.chat.assistant-actions` |
 | 数据源    | `useProjection("tokenUsage")`，与会话快照同源                                                           |
 | 累计口径  | `uncachedInputTokens + cacheReadTokens + cacheWriteTokens + outputTokens`                               |
 | 喂养逻辑  | projection 变化时 `delta = 当前累计 - 上次累计`，`delta > 0` 则喂食                                     |
@@ -121,8 +121,8 @@ npm install dsh-plugin-whalefeed
 **Host 持久化安全吗？**
 数据只写入 Harness 本地数据目录，不经过第三方网络，不上传任何远端。
 
-**为什么某些环境只显示头部徽标？**
-说明当前 Harness 版本没有 `shell.overlay` 槽位，插件自动降级为会话头部徽标模式。
+**为什么某些环境不显示鲸鱼娘？**
+插件需要会话作用域槽位来读取 token 数据。如果当前 Harness 版本没有 `conversation.session.header.utilities`，会自动尝试 `conversation.chat.assistant-actions`；若都不可用则不会显示。
 
 **如何导出/导入？**
 点击鲸鱼娘打开详情 → 导出会下载 JSON 文件；导入会提示粘贴 JSON 状态。
@@ -136,7 +136,7 @@ npm install dsh-plugin-whalefeed
 ## 兼容范围
 
 - DeepSeek Harness `0.1.0-rc.6`（web profile）
-- 依赖 `tokenUsage` projection、`shell.overlay` 槽位、Host `webServer` 服务（可选）
+- 依赖 `tokenUsage` projection、`conversation.session.header.utilities` 槽位、Host `webServer` 服务（可选）
 - 所有访问均有守卫；Harness 升级导致形状变化时静默降级，不抛错
 
 ## 开发
