@@ -34,3 +34,4 @@
 - SVG gradient IDs are unique per instance.
 - Reset button no longer depends on `window.confirm`; uses an inline two-step confirm that works in embedded/WebView environments.
 - Default pet size increased to 144px and custom image is scaled slightly so the whale girl is more visible.
+- Rebalanced default stage thresholds to 10M / 50M / 250M / 1B tokens so progression remains challenging for heavy usage (roughly 5× per stage).

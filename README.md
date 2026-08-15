@@ -91,10 +91,10 @@ npm install dsh-plugin-whalefeed
 ```js
 [
   { threshold: 0, belly: 0.75 },
-  { threshold: 5000, belly: 1.0 },
-  { threshold: 20000, belly: 1.35 },
-  { threshold: 80000, belly: 1.75 },
-  { threshold: 300000, belly: 2.2 },
+  { threshold: 10000000, belly: 1.0 },
+  { threshold: 50000000, belly: 1.35 },
+  { threshold: 250000000, belly: 1.75 },
+  { threshold: 1000000000, belly: 2.2 },
 ];
 ```
 

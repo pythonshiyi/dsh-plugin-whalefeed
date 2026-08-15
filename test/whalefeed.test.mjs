@@ -160,19 +160,19 @@ test("normalizeStages sorts, dedupes invalid entries, and prepends zero threshol
 
 test("computeStage picks highest satisfied threshold", () => {
   assert.equal(computeStage(0, DEFAULT_STAGES), 0);
-  assert.equal(computeStage(4999, DEFAULT_STAGES), 0);
-  assert.equal(computeStage(5000, DEFAULT_STAGES), 1);
-  assert.equal(computeStage(20000, DEFAULT_STAGES), 2);
-  assert.equal(computeStage(300000, DEFAULT_STAGES), 4);
+  assert.equal(computeStage(9999999, DEFAULT_STAGES), 0);
+  assert.equal(computeStage(10000000, DEFAULT_STAGES), 1);
+  assert.equal(computeStage(50000000, DEFAULT_STAGES), 2);
+  assert.equal(computeStage(1000000000, DEFAULT_STAGES), 4);
   assert.equal(computeStage(10 ** 9, DEFAULT_STAGES), 4);
   assert.equal(computeStage(1000, []), 0);
 });
 
 test("stageProgress returns progress toward next stage", () => {
-  const p = stageProgress(10000, DEFAULT_STAGES);
+  const p = stageProgress(20000000, DEFAULT_STAGES);
   assert.equal(p.stage, 1);
-  assert.equal(p.next.threshold, 20000);
-  assert.ok(p.progress > 0.3 && p.progress < 0.4);
+  assert.equal(p.next.threshold, 50000000);
+  assert.ok(p.progress > 0.2 && p.progress < 0.3);
   const last = stageProgress(10 ** 9, DEFAULT_STAGES);
   assert.equal(last.stage, 4);
   assert.equal(last.next, null);
@@ -181,8 +181,8 @@ test("stageProgress returns progress toward next stage", () => {
 
 test("bellyScale increases with fed tokens and clamps gracefully", () => {
   const b0 = bellyScale(0, DEFAULT_STAGES);
-  const b1 = bellyScale(5000, DEFAULT_STAGES);
-  const b2 = bellyScale(300000, DEFAULT_STAGES);
+  const b1 = bellyScale(10000000, DEFAULT_STAGES);
+  const b2 = bellyScale(1000000000, DEFAULT_STAGES);
   assert.ok(b1 > b0);
   assert.ok(b2 > b1);
   assert.ok(Number.isFinite(bellyScale(-100, DEFAULT_STAGES)));
@@ -228,11 +228,18 @@ test("parseStoredState handles invalid/mismatched data and preserves valid state
 });
 
 test("applyTokenDelta feeds tokens, counts events, and detects stage up", () => {
-  const base = { ...initialState("s1"), fedTokens: 4990, lastTotalTokens: 4990, stage: 0, feedEvents: 1, createdAt: 1 };
+  const base = {
+    ...initialState("s1"),
+    fedTokens: 9999990,
+    lastTotalTokens: 9999990,
+    stage: 0,
+    feedEvents: 1,
+    createdAt: 1,
+  };
   const r = applyTokenDelta(base, 20, {});
   assert.equal(r.delta, 20);
-  assert.equal(r.state.fedTokens, 5010);
-  assert.equal(r.state.lastTotalTokens, 5010);
+  assert.equal(r.state.fedTokens, 10000010);
+  assert.equal(r.state.lastTotalTokens, 10000010);
   assert.equal(r.state.stage, 1);
   assert.equal(r.state.feedEvents, 2);
   assert.equal(r.stageUp, true);
@@ -387,7 +394,7 @@ test("stageProgress handles empty/custom and negative fed", () => {
   // Empty stages fall back to the built-in defaults (same as normalizeConfig).
   const empty = stageProgress(100, []);
   assert.equal(empty.stage, 0);
-  assert.equal(empty.next.threshold, 5000);
+  assert.equal(empty.next.threshold, 10000000);
 });
 
 test("bellyScale respects custom belly values and keeps growing past max", () => {
