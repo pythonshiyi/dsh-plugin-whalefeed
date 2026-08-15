@@ -70,7 +70,7 @@ npm install dsh-plugin-whalefeed
       name: "dsh-plugin-whalefeed"
       config:
         position: bottom-right # bottom-right | bottom-left | top-right | top-left | {x: 20, y: 20}
-        size: 96 # 桌宠尺寸 px（32-256，默认 96）
+        size: 144 # 桌宠尺寸 px（32-320，默认 144）
         opacity: 0.92 # 不透明度（0.2-1，默认 0.92）
         showTokenBadge: true # 头顶显示当前会话累计 token
         showStageName: true # 显示当前阶段名

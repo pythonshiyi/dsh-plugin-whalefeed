@@ -70,7 +70,7 @@ Restart `dsh --profile web` and refresh the page.
       name: "dsh-plugin-whalefeed"
       config:
         position: bottom-right # bottom-right | bottom-left | top-right | top-left | {x: 20, y: 20}
-        size: 96 # pet size px (32-256, default 96)
+        size: 144 # pet size px (32-320, default 144)
         opacity: 0.92 # opacity (0.2-1, default 0.92)
         showTokenBadge: true # show session token total above the pet
         showStageName: true # show current stage name below the pet

@@ -32,3 +32,5 @@
 - Feed ratio no longer drops fractional food.
 - Empty stage configs consistently fall back to built-in defaults.
 - SVG gradient IDs are unique per instance.
+- Reset button no longer depends on `window.confirm`; uses an inline two-step confirm that works in embedded/WebView environments.
+- Default pet size increased to 144px and custom image is scaled slightly so the whale girl is more visible.

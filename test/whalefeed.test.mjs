@@ -108,7 +108,7 @@ test("fmt formats compact token counts", () => {
 test("normalizeConfig applies defaults and tolerates malformed input", () => {
   const d = normalizeConfig(undefined);
   assert.equal(d.position, "bottom-right");
-  assert.equal(d.size, 96);
+  assert.equal(d.size, 144);
   assert.equal(d.opacity, 0.92);
   assert.equal(d.showTokenBadge, true);
   assert.equal(d.showStageName, true);
@@ -138,7 +138,7 @@ test("normalizeConfig applies defaults and tolerates malformed input", () => {
 });
 
 test("normalizeConfig clamps size and rejects bad position", () => {
-  assert.equal(normalizeConfig({ size: 9999 }).size, 256);
+  assert.equal(normalizeConfig({ size: 9999 }).size, 320);
   assert.equal(normalizeConfig({ size: 1 }).size, 32);
   assert.equal(normalizeConfig({ position: "middle" }).position, "bottom-right");
 });
