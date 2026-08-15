@@ -21,9 +21,12 @@ English | [中文](README.md)
   - Browser `localStorage` as a fast cache by default;
   - Optional host-backed file persistence for cross-browser/device sharing on the same Harness profile;
   - Automatically falls back to localStorage when the host half is unavailable.
-- **Export / Import**: export the current whale girl as JSON, or paste JSON to import.
-- **Whale Girl Gallery**: view all session whale girls, stages, and total fed amounts.
-- **Feed trend**: a mini sparkline of the latest feeding events in the detail panel.
+- **Game-style attribute panel**: click the whale to open an immersive status panel with session tokens, fed tokens, stage progress, feed count, last fed time, and feed trend.
+- **Settings submenu**: export, import, gallery, and reset are tucked behind a subtle “⚙ Settings” button and open on a second click.
+- **Export / Import**: export the current whale girl as JSON; import uses an inline textarea instead of browser prompts.
+- **Whale Girl Gallery**: view all session whale girls, stages, and total fed amounts from the Settings submenu.
+- **Feed trend**: a mini sparkline of the latest feeding events in the game panel.
+- **Difficulty curve**: default stage thresholds are 10M / 50M / 250M / 1B tokens (roughly 5× per stage) so Mega Whale is a real achievement.
 - **Multi-tab sync**: `BroadcastChannel` first, `storage` event fallback.
 - **Corrupted data backup**: damaged local state is backed up as `:bak` before rebuilding.
 - **i18n**: zh/en, with Chinese fallback.
@@ -126,10 +129,10 @@ Data is written only to the Harness local data directory; no third-party network
 The plugin needs a session-scoped slot to read token data. If `conversation.session.header.utilities` is unavailable, it tries `conversation.chat.assistant-actions`; if neither exists, it does not render.
 
 **How do I export/import?**
-Open the pet details → Export downloads a JSON file; Import prompts you to paste a JSON state.
+Open the whale’s game attribute panel → “⚙ Settings” → Export downloads a JSON file; Import opens an inline textarea for pasting a JSON state.
 
 **How do I see all whale girls?**
-Open the details panel → Gallery to see all session whale girls and global fed totals.
+Open the game attribute panel → “⚙ Settings” → Gallery to see all session whale girls and global fed totals.
 
 **If I reset, will old tokens be fed again?**
 No. Reset anchors `lastTotalTokens` to the current projection total, so previously consumed tokens are not fed twice.
