@@ -21,7 +21,9 @@ English | [中文](README.md)
   - Browser `localStorage` as a fast cache by default;
   - Optional host-backed file persistence for cross-browser/device sharing on the same Harness profile;
   - Automatically falls back to localStorage when the host half is unavailable.
-- **Game-style attribute panel**: click the whale to open an immersive status panel with session tokens, fed tokens, stage progress, feed count, last fed time, and feed trend.
+- **Game-style attribute panel**: click the whale to open an immersive status panel with session tokens, fed tokens, stage progress, affection, headpat count, feed count, last fed time, and feed trend.
+- **Affection / headpat interaction**: double-click the whale to give a headpat; affection grows from Stranger → Familiar → Friendly → Close → Soulmate with a cooldown so it never interrupts normal work.
+- **Token health reminders**: large single bites, session over-budget, and daily over-budget are shown only as gentle whale bubbles — no popups, no interruptions.
 - **Settings submenu**: export, import, gallery, and reset are tucked behind a subtle “⚙ Settings” button and open on a second click.
 - **Export / Import**: export the current whale girl as JSON; import uses an inline textarea instead of browser prompts.
 - **Whale Girl Gallery**: view all session whale girls, stages, and total fed amounts from the Settings submenu.
@@ -84,6 +86,13 @@ Restart `dsh --profile web` and refresh the page.
         hostPersistence: true # enable host file persistence (falls back to localStorage)
         historyLimit: 50 # max number of feed history entries
         visual: auto # auto uses assets/ PNGs and falls back to SVG; svg forces built-in SVG; custom forces custom images
+        affectionEnabled: true # enable headpat/affection
+        petCooldownMs: 3000 # headpat cooldown (ms)
+        healthReminders: true # enable token health reminders
+        spikeThreshold: 10000000 # warn when a single bite exceeds this
+        sessionBudget: 500000000 # warn when this session exceeds this
+        dailyBudget: 1000000000 # warn when today's total exceeds this
+        warningCooldownMs: 60000 # min interval between same-kind reminders (ms)
         stages: [] # custom stages, see below
 ```
 

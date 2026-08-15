@@ -57,6 +57,8 @@ const {
   STORAGE_BAK_SUFFIX,
   DEFAULT_STAGES,
   DEFAULT_HISTORY_LIMIT,
+  DEFAULT_AFFECTION_LEVELS,
+  DAILY_USAGE_KEY,
   num,
   fmt,
   normalizeConfig,
@@ -77,6 +79,14 @@ const {
   applyTokenDelta,
   formatRelativeTime,
   positionStyle,
+  affectionLevel,
+  affectionInfo,
+  affectionLabel,
+  readDailyUsage,
+  writeDailyUsage,
+  addDailyUsage,
+  collectHealthWarnings,
+  applyHealthWarnings,
   buildGalleryFromMap,
   sparklinePoints,
   WhaleSvg,
@@ -517,4 +527,90 @@ test("parseStoredState backs up corrupted data before resetting", () => {
   assert.equal(result.exists, false);
   assert.ok(store.has(storageKey(sid) + STORAGE_BAK_SUFFIX));
   delete globalThis.localStorage;
+});
+
+test("normalizeConfig defaults affection and health options", () => {
+  const d = normalizeConfig(undefined);
+  assert.equal(d.affectionEnabled, true);
+  assert.equal(d.petCooldownMs, 3000);
+  assert.equal(d.healthReminders, true);
+  assert.equal(d.spikeThreshold, 10000000);
+  assert.equal(d.sessionBudget, 500000000);
+  assert.equal(d.dailyBudget, 1000000000);
+  assert.equal(d.warningCooldownMs, 60000);
+});
+
+test("affectionLevel/affectionInfo/affectionLabel work across thresholds", () => {
+  assert.equal(DEFAULT_AFFECTION_LEVELS.length, 5);
+  assert.equal(affectionLevel(0), 0);
+  assert.equal(affectionLevel(49), 0);
+  assert.equal(affectionLevel(50), 1);
+  assert.equal(affectionLevel(1000), 4);
+  const info = affectionInfo(50);
+  assert.equal(info.level, 1);
+  assert.equal(info.next.threshold, 200);
+  const t = (k) => ({ affection0: "S", affection1: "F" })[k] || k;
+  assert.equal(affectionLabel(0, t), "S");
+  assert.equal(affectionLabel(50, t), "F");
+});
+
+test("daily usage read/write/add persists across calls", () => {
+  const store = new Map();
+  globalThis.localStorage = {
+    getItem(key) {
+      return store.has(key) ? store.get(key) : null;
+    },
+    setItem(key, value) {
+      store.set(key, String(value));
+    },
+    removeItem(key) {
+      store.delete(key);
+    },
+  };
+  assert.equal(readDailyUsage().tokens, 0);
+  writeDailyUsage({ date: readDailyUsage().date, tokens: 123, budgetWarned: false });
+  assert.equal(readDailyUsage().tokens, 123);
+  assert.equal(addDailyUsage(100).tokens, 223);
+  const stored = JSON.parse(store.get(DAILY_USAGE_KEY));
+  assert.equal(stored.tokens, 223);
+  delete globalThis.localStorage;
+});
+
+test("collectHealthWarnings and applyHealthWarnings handle spike/session/daily", () => {
+  const options = normalizeConfig({
+    spikeThreshold: 1000,
+    sessionBudget: 5000,
+    dailyBudget: 10000,
+    warningCooldownMs: 0,
+    healthReminders: true,
+  });
+  const state = initialState("s");
+  const daily = { tokens: 10000, budgetWarned: false };
+  const warnings = collectHealthWarnings({ delta: 1500, totalTokens: 6000, state, daily, options });
+  assert.ok(warnings.some((w) => w.type === "spike"));
+  assert.ok(warnings.some((w) => w.type === "session"));
+  assert.ok(warnings.some((w) => w.type === "daily"));
+  const now = Date.now();
+  const res = applyHealthWarnings(state, warnings, now);
+  assert.equal(res.state.health.spikeWarnedAt, now);
+  assert.equal(res.state.health.sessionBudgetWarned, true);
+});
+
+test("parseStoredState and applyTokenDelta preserve affection and health", () => {
+  const sid = "s";
+  const raw = serializeState({
+    ...initialState(sid),
+    affection: 7,
+    petCount: 3,
+    lastPetAt: 123,
+    health: { spikeWarnedAt: 456, sessionBudgetWarned: true },
+  });
+  const parsed = parseStoredState(raw, sid);
+  assert.equal(parsed.state.affection, 7);
+  assert.equal(parsed.state.petCount, 3);
+  assert.equal(parsed.state.health.spikeWarnedAt, 456);
+  assert.equal(parsed.state.health.sessionBudgetWarned, true);
+  const r = applyTokenDelta(parsed.state, 10, {});
+  assert.equal(r.state.affection, 7);
+  assert.equal(r.state.petCount, 3);
 });

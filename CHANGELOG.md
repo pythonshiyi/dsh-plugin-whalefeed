@@ -17,8 +17,10 @@
 - Session-scoped slot rendering (`conversation.session.header.utilities`) with CSS fixed floating; fallback to `conversation.chat.assistant-actions`.
 - GitHub Actions CI (`npm run check`, `npm test`, `npm run pack`).
 - ESLint flat config and Prettier config.
-- New config options: `hostPersistence`, `historyLimit`, `visual`.
+- New config options: `hostPersistence`, `historyLimit`, `visual`, `affectionEnabled`, `petCooldownMs`, `healthReminders`, `spikeThreshold`, `sessionBudget`, `dailyBudget`, `warningCooldownMs`.
 - Bundled custom PNG whale girl assets (`assets/`) with 5 belly stages and eating/happy/sleepy expressions, served by the Host half with SVG fallback.
+- Affection / headpat interaction: double-click the whale to increase affection (Stranger → Familiar → Friendly → Close → Soulmate) with a cooldown.
+- Token health reminders: gentle bubble-only warnings for large single bites, session budget, and daily budget.
 
 ### Changed
 
