@@ -25,6 +25,8 @@
 - `bellyScale` now keeps growing modestly past the max stage.
 - `applyTokenDelta` stores fractional whale food without losing tokens.
 - `normalizeHistory` validates and caps feed history.
+- Detail panel redesigned as an immersive game-style attribute panel; export/import/gallery/reset are now hidden behind a Settings submenu.
+- Import uses an inline textarea instead of `window.prompt`; export falls back to clipboard copy when download is unavailable.
 - README (zh/en) and CHANGELOG updated.
 
 ### Fixed
