@@ -8,6 +8,10 @@
 ![GitHub release](https://img.shields.io/github/v/release/pythonshiyi/dsh-plugin-whalefeed)
 [![dsh-plugin](https://img.shields.io/badge/GitHub-dsh--plugin-blue)](https://github.com/topics/dsh-plugin)
 
+<p align="center">
+  <img src="docs/preview.png" alt="dsh-plugin-whalefeed 预览" width="820" />
+</p>
+
 ## 功能特性
 
 - **每会话独立鲸鱼娘**：每个聊天会话一只，互不串台；切换会话自动切换。

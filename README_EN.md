@@ -8,6 +8,10 @@ English | [中文](README.md)
 ![GitHub release](https://img.shields.io/github/v/release/pythonshiyi/dsh-plugin-whalefeed)
 [![dsh-plugin](https://img.shields.io/badge/GitHub-dsh--plugin-blue)](https://github.com/topics/dsh-plugin)
 
+<p align="center">
+  <img src="docs/preview.png" alt="dsh-plugin-whalefeed preview" width="820" />
+</p>
+
 ## Features
 
 - **One whale girl per session**: sessions never share a whale; switching sessions loads that session's own whale.

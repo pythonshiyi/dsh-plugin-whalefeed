@@ -21,6 +21,7 @@
 - Bundled custom PNG whale girl assets (`assets/`) with 5 belly stages and eating/happy/sleepy expressions, served by the Host half with SVG fallback.
 - Affection / headpat interaction: double-click the whale to increase affection (Stranger → Familiar → Friendly → Close → Soulmate) with a cooldown.
 - Token health reminders: gentle bubble-only warnings for large single bites, session budget, and daily budget.
+- README preview banner (`docs/preview.png`) generated from bundled whale-girl assets via `scripts/make_preview.py`.
 
 ### Changed
 
