@@ -35,6 +35,7 @@
   "files": [
     "lib/index.js",
     "lib/client.js",
+    "assets",
     "CHANGELOG.md",
     "README.md",
     "README_EN.md",

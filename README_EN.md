@@ -14,7 +14,7 @@ English | [中文](README.md)
 - **Automatic token feeding**: reads the Harness `tokenUsage` projection (input + cache + output) and feeds the whale whenever token usage grows.
 - **Visual belly growth**: belly scales continuously with cumulative consumption and levels up at thresholds:
   - Whale Fry → Tiny Belly → Round Belly → Big Belly Whale → Mega Whale
-- **Self-contained SVG art**: local vector graphics only, adapts to light/dark themes, and supports more moods (happy, shy, thinking, sleepy, full, etc.).
+- **Replaceable character art**: built-in SVG placeholder plus a bundled custom PNG set (`assets/`) with 5 belly stages and eating/happy/sleepy expressions; falls back to SVG if images fail to load.
 - **Animations**: eating wiggle, level-up bounce, bubbles; respects `prefers-reduced-motion`.
 - **Draggable, clickable, keyboard accessible**: floats at the bottom-right by default; supports Tab focus, Enter/Space to open, Esc to close.
 - **Dual storage**:
@@ -80,6 +80,7 @@ Restart `dsh --profile web` and refresh the page.
         draggable: true # allow dragging the pet
         hostPersistence: true # enable host file persistence (falls back to localStorage)
         historyLimit: 50 # max number of feed history entries
+        visual: auto # auto uses assets/ PNGs and falls back to SVG; svg forces built-in SVG; custom forces custom images
         stages: [] # custom stages, see below
 ```
 
@@ -101,17 +102,17 @@ You can override with `{ threshold, belly, label? }`. Stages are automatically s
 
 ## How it works
 
-| Area          | Details                                                                                                          |
-| ------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Area          | Details                                                                                                                                                       |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Primary slot  | `conversation.session.header.utilities` (session scope, provides token data); CSS `fixed` for global floating; fallback `conversation.chat.assistant-actions` |
-| Data source   | `useProjection("tokenUsage")`, same source as the conversation snapshot                                          |
-| Total         | `uncachedInputTokens + cacheReadTokens + cacheWriteTokens + outputTokens`                                        |
-| Feeding       | On projection change, `delta = current total - last total`; if `delta > 0`, feed the current session's whale     |
-| Local storage | `localStorage` key: `dsh-plugin-whalefeed:v1:{sessionId}`                                                        |
-| Host storage  | Node half serves `/dsh-whalefeed-state` and `/dsh-whalefeed-states`, stored in `dsh-plugin-whalefeed-store.json` |
-| Multi-tab     | `BroadcastChannel` + `storage` event dual channel                                                                |
-| Corruption    | Failed parses are backed up as `:bak` before rebuilding                                                          |
-| Accessibility | Keyboard operations, ARIA, `prefers-reduced-motion`                                                              |
+| Data source   | `useProjection("tokenUsage")`, same source as the conversation snapshot                                                                                       |
+| Total         | `uncachedInputTokens + cacheReadTokens + cacheWriteTokens + outputTokens`                                                                                     |
+| Feeding       | On projection change, `delta = current total - last total`; if `delta > 0`, feed the current session's whale                                                  |
+| Local storage | `localStorage` key: `dsh-plugin-whalefeed:v1:{sessionId}`                                                                                                     |
+| Host storage  | Node half serves `/dsh-whalefeed-state` and `/dsh-whalefeed-states`, stored in `dsh-plugin-whalefeed-store.json`                                              |
+| Multi-tab     | `BroadcastChannel` + `storage` event dual channel                                                                                                             |
+| Corruption    | Failed parses are backed up as `:bak` before rebuilding                                                                                                       |
+| Accessibility | Keyboard operations, ARIA, `prefers-reduced-motion`                                                                                                           |
 
 ## FAQ
 

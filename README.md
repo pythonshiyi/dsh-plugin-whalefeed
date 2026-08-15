@@ -14,7 +14,7 @@
 - **自动按 token 喂养**：读取 `tokenUsage` 投影（输入 + 缓存 + 输出），token 增长自动进食。
 - **肚子可视化成长**：肚子大小随累计消耗连续变化，跨阈值升级：
   - 鲸鱼苗 → 小腹微凸 → 肚子圆滚滚 → 大肚鲸娘 → 巨鲸神
-- **SVG 手绘风桌宠**：纯本地矢量图，自动适配明暗主题，支持更多表情（开心、害羞、思考、犯困、吃撑等）。
+- **可替换形象素材**：默认内置 SVG 占位形象；已附带一组自定义 PNG 立绘（`assets/`），支持 5 阶段肚子变化和进食/开心/犯困表情切换；图片加载失败时自动回退 SVG。
 - **进食/升级动画**：摇头晃脑、蹦跳、冒气泡；支持 `prefers-reduced-motion` 自动减少动画。
 - **可拖动、可点击、可键盘操作**：默认右下角悬浮，可拖到任意位置；支持 Tab 聚焦、Enter/Space 打开、Esc 关闭。
 - **双存储**：
@@ -80,6 +80,7 @@ npm install dsh-plugin-whalefeed
         draggable: true # 是否允许拖动桌宠
         hostPersistence: true # 是否启用 Host 文件持久化（不可用时自动回退 localStorage）
         historyLimit: 50 # 喂食历史条数上限
+        visual: auto # auto 使用 assets/ 自定义 PNG，失败回退 SVG；svg 强制内置 SVG；custom 强制自定义图
         stages: [] # 自定义阶段，见下方说明
 ```
 
@@ -101,17 +102,17 @@ npm install dsh-plugin-whalefeed
 
 ## 工作原理
 
-| 环节      | 说明                                                                                                    |
-| --------- | ------------------------------------------------------------------------------------------------------- |
+| 环节      | 说明                                                                                                                                         |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | 主槽位    | `conversation.session.header.utilities`（会话作用域，提供 token 数据）；CSS `fixed` 实现全局悬浮；降级 `conversation.chat.assistant-actions` |
-| 数据源    | `useProjection("tokenUsage")`，与会话快照同源                                                           |
-| 累计口径  | `uncachedInputTokens + cacheReadTokens + cacheWriteTokens + outputTokens`                               |
-| 喂养逻辑  | projection 变化时 `delta = 当前累计 - 上次累计`，`delta > 0` 则喂食                                     |
-| 本地存储  | `localStorage` key：`dsh-plugin-whalefeed:v1:{sessionId}`                                               |
-| Host 存储 | Node 半段提供 `/dsh-whalefeed-state` 与 `/dsh-whalefeed-states`，写入 `dsh-plugin-whalefeed-store.json` |
-| 多标签页  | `BroadcastChannel` + `storage` 事件双通道                                                               |
-| 损坏保护  | 解析失败自动写 `:bak` 备份                                                                              |
-| 无障碍    | 键盘操作、ARIA、`prefers-reduced-motion`                                                                |
+| 数据源    | `useProjection("tokenUsage")`，与会话快照同源                                                                                                |
+| 累计口径  | `uncachedInputTokens + cacheReadTokens + cacheWriteTokens + outputTokens`                                                                    |
+| 喂养逻辑  | projection 变化时 `delta = 当前累计 - 上次累计`，`delta > 0` 则喂食                                                                          |
+| 本地存储  | `localStorage` key：`dsh-plugin-whalefeed:v1:{sessionId}`                                                                                    |
+| Host 存储 | Node 半段提供 `/dsh-whalefeed-state` 与 `/dsh-whalefeed-states`，写入 `dsh-plugin-whalefeed-store.json`                                      |
+| 多标签页  | `BroadcastChannel` + `storage` 事件双通道                                                                                                    |
+| 损坏保护  | 解析失败自动写 `:bak` 备份                                                                                                                   |
+| 无障碍    | 键盘操作、ARIA、`prefers-reduced-motion`                                                                                                     |
 
 ## 常见问题
 

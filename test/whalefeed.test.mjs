@@ -347,6 +347,13 @@ test("normalizeConfig handles resetOnNewSession and custom stages", () => {
   assert.equal(c.stages[1].threshold, 100);
 });
 
+test("normalizeConfig defaults visual to auto and accepts svg/custom", () => {
+  assert.equal(normalizeConfig(undefined).visual, "auto");
+  assert.equal(normalizeConfig({ visual: "svg" }).visual, "svg");
+  assert.equal(normalizeConfig({ visual: "custom" }).visual, "custom");
+  assert.equal(normalizeConfig({ visual: "bogus" }).visual, "auto");
+});
+
 test("normalizeConfig clamps feedRatio and opacity", () => {
   assert.equal(normalizeConfig({ feedRatio: 0 }).feedRatio, 0.000001);
   assert.equal(normalizeConfig({ feedRatio: 999999999 }).feedRatio, 1000000);

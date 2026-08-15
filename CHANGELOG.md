@@ -17,7 +17,8 @@
 - Session-scoped slot rendering (`conversation.session.header.utilities`) with CSS fixed floating; fallback to `conversation.chat.assistant-actions`.
 - GitHub Actions CI (`npm run check`, `npm test`, `npm run pack`).
 - ESLint flat config and Prettier config.
-- New config options: `hostPersistence`, `historyLimit`.
+- New config options: `hostPersistence`, `historyLimit`, `visual`.
+- Bundled custom PNG whale girl assets (`assets/`) with 5 belly stages and eating/happy/sleepy expressions, served by the Host half with SVG fallback.
 
 ### Changed
 
